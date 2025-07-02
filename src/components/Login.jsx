@@ -77,7 +77,14 @@ function Login() {
           </div>
 
           <button type="submit" disabled={loading}>
-            {loading ? "Iniciando sesión..." : "Iniciar Sesión"}
+            {loading ? (
+              <>
+                <span className="loading-spinner"></span>
+                Iniciando sesión...
+              </>
+            ) : (
+              "Iniciar Sesión"
+            )}
           </button>
         </form>
       </div>
