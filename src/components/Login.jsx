@@ -1,39 +1,39 @@
-import { useState } from 'react';
-import authService from '../services/authService';
-import './Login.css';
+import { useState } from "react";
+import authService from "../services/authService";
+import "./Login.css";
 
 function Login() {
   const [formData, setFormData] = useState({
-    email: '',
-    password: ''
+    email: "",
+    password: "",
   });
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState({ type: '', text: '' });
+  const [message, setMessage] = useState({ type: "", text: "" });
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setMessage({ type: '', text: '' });
+    setMessage({ type: "", text: "" });
 
     const result = await authService.login(formData.email, formData.password);
 
     if (result.success) {
       setMessage({
-        type: 'success',
-        text: `¡Bienvenido ${result.nombre}! Has iniciado sesión correctamente.`
+        type: "success",
+        text: `¡Bienvenido ${result.nombre}! Has iniciado sesión correctamente.`,
       });
       // Aquí podrías redirigir a otra página o actualizar el estado de la app
     } else {
       setMessage({
-        type: 'error',
-        text: result.message || 'Error al iniciar sesión'
+        type: "error",
+        text: result.message || "Error al iniciar sesión",
       });
     }
 
@@ -44,11 +44,9 @@ function Login() {
     <div className="login-container">
       <div className="login-card">
         <h2>Iniciar Sesión</h2>
-        
+
         {message.text && (
-          <div className={`alert alert-${message.type}`}>
-            {message.text}
-          </div>
+          <div className={`alert alert-${message.type}`}>{message.text}</div>
         )}
 
         <form onSubmit={handleSubmit}>
@@ -79,7 +77,7 @@ function Login() {
           </div>
 
           <button type="submit" disabled={loading}>
-            {loading ? 'Iniciando sesión...' : 'Iniciar Sesión'}
+            {loading ? "Iniciando sesión..." : "Iniciar Sesión"}
           </button>
         </form>
       </div>
