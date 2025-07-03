@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom"; // Importa useNavigate
 import authService from "../services/authService";
 import "./Login.css";
 
@@ -10,6 +11,8 @@ function Login() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState({ type: "", text: "" });
 
+  const navigate = useNavigate(); // Inicializa useNavigate
+
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -19,6 +22,12 @@ function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!formData.email || !formData.password) {
+      setMessage({ type: "error", text: "Completa todos los campos." });
+      return;
+    }
+
     setLoading(true);
     setMessage({ type: "", text: "" });
 
@@ -29,11 +38,12 @@ function Login() {
         type: "success",
         text: `¡Bienvenido ${result.nombre}! Has iniciado sesión correctamente.`,
       });
-      // Aquí podrías redirigir a otra página o actualizar el estado de la app
+      // Redirección al Home
+      navigate("/home"); // Redirige al path /home
     } else {
       setMessage({
         type: "error",
-        text: result.message || "Error al iniciar sesión",
+        text: result.message || "Error al iniciar sesión.",
       });
     }
 
@@ -41,25 +51,31 @@ function Login() {
   };
 
   return (
-    <div className="login-container">
-      <div className="login-card">
+    <main className="login-container">
+      <section className="login-card" aria-label="Formulario de login">
         <h2>Iniciar Sesión</h2>
 
         {message.text && (
-          <div className={`alert alert-${message.type}`}>{message.text}</div>
+          <div
+            className={`alert alert-${message.type}`}
+            role={message.type === "error" ? "alert" : "status"}
+          >
+            {message.text}
+          </div>
         )}
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} noValidate>
           <div className="form-group">
-            <label htmlFor="email">Email</label>
+            <label htmlFor="email">Correo electrónico</label>
             <input
               type="email"
               id="email"
               name="email"
               value={formData.email}
               onChange={handleChange}
-              required
               placeholder="correo@ejemplo.com"
+              autoComplete="email"
+              required
             />
           </div>
 
@@ -71,15 +87,16 @@ function Login() {
               name="password"
               value={formData.password}
               onChange={handleChange}
-              required
               placeholder="••••••••"
+              autoComplete="current-password"
+              required
             />
           </div>
 
           <button type="submit" disabled={loading}>
             {loading ? (
               <>
-                <span className="loading-spinner"></span>
+                <span className="loading-spinner" aria-hidden="true"></span>
                 Iniciando sesión...
               </>
             ) : (
@@ -87,8 +104,8 @@ function Login() {
             )}
           </button>
         </form>
-      </div>
-    </div>
+      </section>
+    </main>
   );
 }
 
