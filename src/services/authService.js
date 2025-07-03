@@ -31,7 +31,8 @@ const authService = {
                 }));
             }
 
-            return response.data;
+            // Aseguramos que siempre retornamos un objeto con 'success' y 'message'
+            return { success: true, ...response.data }; // Añade success: true aquí
         } catch (error) {
             console.error('Error en login:', error);
 
@@ -59,22 +60,30 @@ const authService = {
         }
     },
 
-    register: async (userData) => {
+    // *** MODIFICACIÓN AQUÍ ***
+    register: async (nombre, email, password) => { // Acepta nombre, email, password
         try {
-            const response = await axiosInstance.post('/Auth/register', userData);
-            return response.data;
+            const response = await axiosInstance.post('/Auth/register', { // Construye el objeto
+                nombre,
+                email,
+                password
+            });
+            // Suponemos que la respuesta exitosa tendrá { success: true, message: "..." }
+            // Si tu API devuelve solo datos, ajusta esto para que incluya 'success: true'
+            return { success: true, ...response.data };
         } catch (error) {
-            if (error.response && error.response.status === 400) {
-                return error.response.data;
+            console.error('Error en register:', error);
+            if (error.response) {
+                // Si el backend devuelve un mensaje de error específico, úsalo
+                return {
+                    success: false,
+                    message: error.response.data.message || `Error del servidor: ${error.response.status}`
+                };
             }
-
-            if (error.response && error.response.status === 500) {
-                return error.response.data;
-            }
-
+            // Error de red o algo más
             return {
                 success: false,
-                message: 'Error al conectar con el servidor'
+                message: 'No se pudo conectar con el servidor para registrar el usuario.'
             };
         }
     },

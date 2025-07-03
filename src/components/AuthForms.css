@@ -1,0 +1,196 @@
+/* Variables CSS - Asegúrate de que sean consistentes con Home.css si quieres */
+:root {
+  --primary-color: #6366f1; /* Indigo 500 */
+  --text-color: #374151; /* Gray 700 */
+  --text-light: #6b7280; /* Gray 500 */
+  --bg-color-auth: #f9fafb; /* Gray 50 */
+  --card-bg-auth: #ffffff;
+  --border-color-auth: #e5e7eb; /* Gray 200 */
+  --shadow-auth: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+  --input-focus-border: #6366f1; /* Primary color */
+  --error-color: #ef4444; /* Red 500 */
+  --success-color: #22c55e; /* Green 500 */
+}
+
+/* Base styles for auth forms */
+.auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: var(--bg-color-auth);
+  padding: 20px;
+  box-sizing: border-box; /* Incluir padding en el tamaño total */
+}
+
+.auth-card {
+  background-color: var(--card-bg-auth);
+  border-radius: 16px; /* Bordes más redondeados */
+  padding: 40px;
+  box-shadow: var(--shadow-auth);
+  width: 100%;
+  max-width: 420px; /* Ancho máximo para el formulario */
+  text-align: center; /* Centrar el contenido dentro de la tarjeta */
+  border: 1px solid var(--border-color-auth); /* Borde sutil */
+}
+
+.auth-header {
+  margin-bottom: 30px;
+}
+
+.auth-logo {
+  color: var(--primary-color); /* Color del logo */
+  margin-bottom: 15px;
+}
+
+.auth-logo svg {
+  width: 60px;
+  height: 60px;
+  stroke-width: 1.5; /* Grosor de la línea del SVG */
+}
+
+
+.auth-card h2 {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--text-color);
+  margin-bottom: 5px;
+}
+
+.auth-card p {
+  color: var(--text-light);
+  font-size: 1rem;
+  margin-bottom: 25px;
+}
+
+/* Alerts */
+.auth-alert {
+  padding: 12px 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid transparent;
+}
+
+.alert-error {
+  background-color: #fee2e2; /* Red 100 */
+  color: var(--error-color);
+  border-color: #fca5a5; /* Red 300 */
+}
+
+.alert-success {
+  background-color: #d1fae5; /* Green 100 */
+  color: var(--success-color);
+  border-color: #86efac; /* Green 300 */
+}
+
+/* Form Groups */
+.form-group {
+  text-align: left; /* Alinea los labels y inputs a la izquierda */
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-color);
+  margin-bottom: 8px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid var(--border-color-auth);
+  border-radius: 8px;
+  font-size: 1rem;
+  color: var(--text-color);
+  background-color: #fdfdfd; /* Ligeramente diferente para el input */
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  box-sizing: border-box; /* Incluir padding en el ancho */
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: var(--input-focus-border);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2); /* Sombra de enfoque azul suave */
+}
+
+/* Buttons */
+.auth-button {
+  width: 100%;
+  padding: 14px 20px;
+  background-color: var(--primary-color);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-top: 25px; /* Espacio para el botón */
+}
+
+.auth-button:hover:not(:disabled) {
+  background-color: var(--primary-light);
+  transform: translateY(-2px);
+}
+
+.auth-button:disabled {
+  background-color: #cbd5e1; /* Gray 300 */
+  cursor: not-allowed;
+}
+
+/* Loading spinner */
+.loading-spinner {
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-top: 3px solid #fff;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Footer text for auth forms */
+.auth-footer-text {
+  margin-top: 25px;
+  font-size: 0.95rem;
+  color: var(--text-light);
+}
+
+.auth-footer-text a {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s ease;
+}
+
+.auth-footer-text a:hover {
+  color: var(--primary-light);
+  text-decoration: underline;
+}
+
+/* Responsive adjustments for auth forms */
+@media (max-width: 600px) {
+  .auth-card {
+    padding: 30px 20px;
+    margin: 15px; /* Un poco de margen para pantallas muy pequeñas */
+  }
+
+  .auth-card h2 {
+    font-size: 1.8rem;
+  }
+}

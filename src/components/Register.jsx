@@ -1,28 +1,18 @@
-import { useState, useEffect } from "react";
-import { Link, useNavigate } from 'react-router-dom';
-import authService from "../services/authService";
-import "./Login.css"; // Usamos los mismos estilos
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom"; // Importa Link y useNavigate
+import authService from "../services/authService"; // Asegúrate de que este servicio tenga una función register
+import "./AuthForms.css"; // Usaremos un CSS compartido para login y register
 
 function Register() {
-  const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    nombre: "",
-    apellido: "",
+    nombre: "", // Asegúrate de pedir el nombre
     email: "",
     password: "",
-    confirmPassword: ""
+    confirmPassword: "", // Para confirmar la contraseña
   });
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState({ type: "", text: "" });
-
-  useEffect(() => {
-    if (message.text) {
-      const timer = setTimeout(() => {
-        setMessage({ type: "", text: "" });
-      }, 5000);
-      return () => clearTimeout(timer);
-    }
-  }, [message]);
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({
@@ -33,46 +23,37 @@ function Register() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    // Validaciones
-    if (formData.password !== formData.confirmPassword) {
-      setMessage({
-        type: "error",
-        text: "Las contraseñas no coinciden"
-      });
+
+    if (!formData.nombre || !formData.email || !formData.password || !formData.confirmPassword) {
+      setMessage({ type: "error", text: "Por favor, completa todos los campos." });
       return;
     }
 
-    if (formData.password.length < 6) {
-      setMessage({
-        type: "error",
-        text: "La contraseña debe tener al menos 6 caracteres"
-      });
+    if (formData.password !== formData.confirmPassword) {
+      setMessage({ type: "error", text: "Las contraseñas no coinciden." });
       return;
     }
 
     setLoading(true);
     setMessage({ type: "", text: "" });
 
-    const result = await authService.register({
-      nombre: formData.nombre,
-      apellido: formData.apellido,
-      email: formData.email,
-      password: formData.password
-    });
+    // Aquí debes llamar a tu servicio de autenticación para el registro
+    // Asegúrate de que authService.register exista y maneje la lógica de la API
+    const result = await authService.register(formData.nombre, formData.email, formData.password);
 
     if (result.success) {
       setMessage({
         type: "success",
-        text: "¡Registro exitoso! Redirigiendo al login..."
+        text: "¡Registro exitoso! Por favor, inicia sesión.",
       });
+      // Opcional: Redirigir al login después de un registro exitoso
       setTimeout(() => {
-        navigate('/login');
-      }, 2000);
+        navigate("/login");
+      }, 2000); // Redirige después de 2 segundos para que el usuario lea el mensaje
     } else {
       setMessage({
         type: "error",
-        text: result.message || "Error al registrar usuario"
+        text: result.message || "Error al registrar usuario.",
       });
     }
 
@@ -80,128 +61,102 @@ function Register() {
   };
 
   return (
-    <div className="auth-container">
-      <div className="auth-card auth-card-register">
+    <main className="auth-container"> {/* Usamos la misma clase para centrar */}
+      <section className="auth-card" aria-label="Formulario de registro">
         <div className="auth-header">
           <div className="auth-logo">
-            <svg width="50" height="50" viewBox="0 0 24 24" fill="none">
-              <path d="M20 21V19C20 16.7909 18.2091 15 16 15H8C5.79086 15 4 16.7909 4 19V21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              <circle cx="12" cy="7" r="4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 2L2 7L12 12L22 7L12 2Z"/>
+              <path d="M2 17L12 22L22 17"/>
+              <path d="M2 12L12 17L22 12"/>
             </svg>
           </div>
-          <h2>Crear Cuenta</h2>
-          <p className="auth-subtitle">Únete a nosotros</p>
+          <h2>Registrarse</h2>
         </div>
 
         {message.text && (
-          <div className={`alert alert-${message.type}`}>
-            <span className="alert-icon">
-              {message.type === 'success' ? '✓' : '✕'}
-            </span>
+          <div
+            className={`auth-alert alert-${message.type}`}
+            role={message.type === "error" ? "alert" : "status"}
+          >
             {message.text}
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="auth-form">
-          <div className="form-row">
-            <div className="form-group">
-              <label htmlFor="nombre">
-                <i className="input-icon">👤</i>
-                Nombre
-              </label>
-              <input
-                type="text"
-                id="nombre"
-                name="nombre"
-                value={formData.nombre}
-                onChange={handleChange}
-                required
-                placeholder="Juan"
-              />
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="apellido">
-                <i className="input-icon">👥</i>
-                Apellido
-              </label>
-              <input
-                type="text"
-                id="apellido"
-                name="apellido"
-                value={formData.apellido}
-                onChange={handleChange}
-                required
-                placeholder="Pérez"
-              />
-            </div>
+        <form onSubmit={handleSubmit} noValidate>
+          <div className="form-group">
+            <label htmlFor="nombre">Nombre Completo</label>
+            <input
+              type="text"
+              id="nombre"
+              name="nombre"
+              value={formData.nombre}
+              onChange={handleChange}
+              placeholder="Tu nombre"
+              autoComplete="name"
+              required
+            />
           </div>
 
           <div className="form-group">
-            <label htmlFor="email">
-              <i className="input-icon">📧</i>
-              Email
-            </label>
+            <label htmlFor="email">Correo electrónico</label>
             <input
               type="email"
               id="email"
               name="email"
               value={formData.email}
               onChange={handleChange}
-              required
               placeholder="correo@ejemplo.com"
+              autoComplete="email"
+              required
             />
           </div>
 
           <div className="form-group">
-            <label htmlFor="password">
-              <i className="input-icon">🔒</i>
-              Contraseña
-            </label>
+            <label htmlFor="password">Contraseña</label>
             <input
               type="password"
               id="password"
               name="password"
               value={formData.password}
               onChange={handleChange}
+              placeholder="••••••••"
+              autoComplete="new-password"
               required
-              placeholder="Mínimo 6 caracteres"
             />
           </div>
 
           <div className="form-group">
-            <label htmlFor="confirmPassword">
-              <i className="input-icon">🔐</i>
-              Confirmar Contraseña
-            </label>
+            <label htmlFor="confirmPassword">Confirmar Contraseña</label>
             <input
               type="password"
               id="confirmPassword"
               name="confirmPassword"
               value={formData.confirmPassword}
               onChange={handleChange}
+              placeholder="••••••••"
+              autoComplete="new-password"
               required
-              placeholder="Repite tu contraseña"
             />
           </div>
 
-          <button type="submit" className="btn-primary" disabled={loading}>
+          <button type="submit" disabled={loading} className="auth-button">
             {loading ? (
               <>
-                <span className="loading-spinner"></span>
+                <span className="loading-spinner" aria-hidden="true"></span>
                 Registrando...
               </>
             ) : (
-              'Crear Cuenta'
+              "Crear Cuenta"
             )}
           </button>
         </form>
 
-        <div className="auth-footer">
-          <p>¿Ya tienes cuenta? <Link to="/login">Inicia sesión</Link></p>
-        </div>
-      </div>
-    </div>
+        <p className="auth-footer-text">
+          ¿Ya tienes una cuenta? <Link to="/login">Inicia Sesión</Link>
+        </p>
+      </section>
+    </main>
   );
 }
 
