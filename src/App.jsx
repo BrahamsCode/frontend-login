@@ -1,18 +1,16 @@
-import { Routes, Route, useNavigate } from 'react-router-dom'; // Importa useNavigate
-import { useState, useEffect } from 'react'; // Importa useState y useEffect
+import { Routes, Route, useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react'; 
 import Login from "./components/Login";
 import Home from "./components/Home";
 import Register from "./components/Register";
-import authService from "./services/authService"; // Asegúrate de importar tu servicio de autenticación
+import authService from "./services/authService"; 
 
 import "./App.css";
 
 function App() {
   const navigate = useNavigate();
-  // Puedes usar un estado para saber si el usuario está autenticado
   const [isAuthenticated, setIsAuthenticated] = useState(authService.isAuthenticated());
 
-  // Efecto para verificar la autenticación al cargar la app
   useEffect(() => {
     setIsAuthenticated(authService.isAuthenticated());
   }, []);
@@ -33,11 +31,10 @@ function App() {
       <Route
         path="/home"
         element={
-          // Opcional: Proteger la ruta. Si no está autenticado, redirige al login.
           isAuthenticated ? (
             <Home onLogout={handleLogout} />
           ) : (
-            <Login /> // O <Navigate to="/login" replace /> de react-router-dom v6
+            <Login />
           )
         }
       />

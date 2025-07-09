@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom"; // Importa Link y useNavigate
+import { Link, useNavigate } from "react-router-dom"; 
 import authService from "../services/authService";
-import "./AuthForms.css"; // <-- ¡Cambia a AuthForms.css!
+import "./AuthForms.css";
 
 function Login() {
   const [formData, setFormData] = useState({
@@ -37,10 +37,9 @@ function Login() {
         type: "success",
         text: `¡Bienvenido ${result.nombre}! Has iniciado sesión correctamente.`,
       });
-      // Redirige al Home después de un pequeño retraso para que el usuario vea el mensaje
       setTimeout(() => {
         navigate("/home");
-      }, 1500); // 1.5 segundos
+      }, 1500); 
     } else {
       setMessage({
         type: "error",

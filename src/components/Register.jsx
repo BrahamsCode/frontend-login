@@ -1,14 +1,14 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom"; // Importa Link y useNavigate
-import authService from "../services/authService"; // Asegúrate de que este servicio tenga una función register
-import "./AuthForms.css"; // Usaremos un CSS compartido para login y register
+import { Link, useNavigate } from "react-router-dom";
+import authService from "../services/authService"; 
+import "./AuthForms.css"; 
 
 function Register() {
   const [formData, setFormData] = useState({
-    nombre: "", // Asegúrate de pedir el nombre
+    nombre: "", 
     email: "",
     password: "",
-    confirmPassword: "", // Para confirmar la contraseña
+    confirmPassword: "", 
   });
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState({ type: "", text: "" });
@@ -37,8 +37,7 @@ function Register() {
     setLoading(true);
     setMessage({ type: "", text: "" });
 
-    // Aquí debes llamar a tu servicio de autenticación para el registro
-    // Asegúrate de que authService.register exista y maneje la lógica de la API
+
     const result = await authService.register(formData.nombre, formData.email, formData.password);
 
     if (result.success) {
@@ -46,10 +45,9 @@ function Register() {
         type: "success",
         text: "¡Registro exitoso! Por favor, inicia sesión.",
       });
-      // Opcional: Redirigir al login después de un registro exitoso
       setTimeout(() => {
         navigate("/login");
-      }, 2000); // Redirige después de 2 segundos para que el usuario lea el mensaje
+      }, 2000); 
     } else {
       setMessage({
         type: "error",
